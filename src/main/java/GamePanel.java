@@ -26,6 +26,12 @@ public class GamePanel extends JPanel implements Runnable{
     Player player = new Player(this, keyH);
     TileManager tileManager = new TileManager(this);
 
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+
+    public SuperObject[] objects = new SuperObject[10];
+
+    public AssetSetter assetSetter = new AssetSetter(this);
+
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -34,6 +40,11 @@ public class GamePanel extends JPanel implements Runnable{
         this.setFocusable(true);
 
     }
+
+    public void setUpGame(){
+        assetSetter.setObjects();
+    }
+
 
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -78,7 +89,15 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tileManager.draw(g2);
+
+        for (SuperObject object : objects) {
+            if (object != null) {
+                object.draw(g2, this);
+            }
+        }
+
         player.draw(g2);
+
         g2.dispose();
     }
 }
